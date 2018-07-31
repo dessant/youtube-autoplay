@@ -1,0 +1,37 @@
+{
+  "extensionName": {
+    "message": "YouTube Essentials: Autoplay",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message":
+      "Disable autoplay on YouTube and save your autoplay settings between sessions.",
+    "description": "Description of the extension."
+  },
+
+  "optionTitle_autoplay": {
+    "message": "Autoplay videos",
+    "description": "Title of the option."
+  },
+
+  "pageTitle": {
+    "message": "$PAGETITLE$ - $EXTENSIONNAME$",
+    "description": "Title of the page.",
+    "placeholders": {
+      "pageTitle": {
+        "content": "$1",
+        "example": "Options"
+      },
+      "extensionName": {
+        "content": "$2",
+        "example": "Extension Name"
+      }
+    }
+  },
+
+  "pageTitle_options": {
+    "message": "Options",
+    "description": "Title of the page."
+  }
+}
