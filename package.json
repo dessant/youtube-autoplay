@@ -1,8 +1,8 @@
 {
-  "name": "youtube-essentials-autoplay",
+  "name": "youtube-autoplay",
   "version": "0.1.0",
   "author": "Armin Sebastian",
-  "repository": "https://github.com/dessant/youtube-essentials-autoplay",
+  "repository": "https://github.com/dessant/youtube-autoplay",
   "license": "MIT",
   "scripts": {
     "build": "cross-env NODE_ENV=development gulp",
