@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill';
 
+import {initStorage} from 'storage/init';
 import storage from 'storage/storage';
 import {executeCode, executeFile, updateCookie} from 'utils/common';
 import {targetEnv} from 'utils/config';
@@ -112,7 +113,7 @@ function addStorageListener() {
 }
 
 async function onLoad() {
-  await storage.init('sync');
+  await initStorage('sync');
   await syncState();
   addStorageListener();
   addCookieListener();

@@ -1,9 +1,9 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const MinifyPlugin = require('babel-minify-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const targetEnv = process.env.TARGET_ENV || 'firefox';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -11,75 +11,58 @@ const isProduction = process.env.NODE_ENV === 'production';
 let plugins = [
   new webpack.DefinePlugin({
     'process.env': {
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
       TARGET_ENV: JSON.stringify(targetEnv)
     },
     global: {}
   }),
-  new ExtractTextPlugin('[name]/style.bundle.css'),
-  isProduction ? new LodashModuleReplacementPlugin({shorthands: true}) : null,
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['vue', 'manifest'],
-    filename: '[name].bundle.js',
-    minChunks: Infinity
+  new VueLoaderPlugin(),
+  new MiniCssExtractPlugin({
+    filename: '[name]/style.css'
   }),
-  isProduction ? new webpack.optimize.ModuleConcatenationPlugin() : null,
-  isProduction ? new MinifyPlugin() : null
+  isProduction ? new LodashModuleReplacementPlugin({shorthands: true}) : null
 ];
 plugins = plugins.filter(Boolean);
 
 module.exports = {
+  mode: isProduction ? 'production' : 'development',
   entry: {
     background: './src/background/main.js',
-    options: './src/options/main.js',
-    vue: ['vue']
+    options: './src/options/main.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'src'),
-    filename: '[name]/[name].bundle.js'
+    chunkFilename: '[name]/script.js'
+  },
+  optimization: {
+    runtimeChunk: {
+      name: 'manifest'
+    },
+    splitChunks: {
+      cacheGroups: {
+        default: false
+      }
+    }
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        use: [
-          {
-            loader: 'babel-loader'
-          }
-        ]
+        use: 'babel-loader'
       },
       {
         test: /\.vue$/,
-        use: [
-          {
-            loader: 'vue-loader',
-            options: {
-              loaders: {
-                scss: ExtractTextPlugin.extract({
-                  use: [
-                    {
-                      loader: 'css-loader'
-                    },
-                    {
-                      loader: 'sass-loader',
-                      options: {
-                        includePaths: [path.resolve(__dirname, 'node_modules')]
-                      }
-                    }
-                  ]
-                })
-              }
-            }
-          }
-        ]
+        use: 'vue-loader'
       },
       {
-        test: /\.scss$/,
+        test: /\.(c|sc|sa)ss$/,
         use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {
-              includePaths: [path.resolve(__dirname, 'node_modules')]
+              includePaths: ['node_modules']
             }
           }
         ]
@@ -90,5 +73,6 @@ module.exports = {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.json', '.css', '.scss', '.vue']
   },
+  devtool: false,
   plugins
 };

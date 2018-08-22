@@ -49,9 +49,4 @@ async function updateCookie(cookie, url, changes) {
   await browser.cookies.set(newCookie);
 }
 
-module.exports = {
-  getText,
-  executeCode,
-  executeFile,
-  updateCookie
-};
+export {getText, executeCode, executeFile, updateCookie};
