@@ -25,6 +25,12 @@ YouTube Autoplay is a browser extension that disables
 the automatic playback of the next video on YouTube, and remembers
 your autoplay settings between sessions.
 
+## Screenshots
+
+<p>
+  <img width="280" src="https://i.imgur.com/qyURbsy.png">
+</p>
+
 ## License
 
 YouTube Autoplay is released under the terms of the MIT License.
