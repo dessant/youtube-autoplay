@@ -1,4 +1,4 @@
-<p align="center"><img src="https://i.imgur.com/SbdxiBP.png"></p>
+<p align="center"><img src="https://i.imgur.com/GY24C1W.png"></p>
 <h1 align="center">YouTube Autoplay</h1>
 
 <p align="center">
