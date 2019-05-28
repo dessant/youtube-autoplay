@@ -1,6 +1,11 @@
 {
   "extensionName": {
-    "message": "Autoplay Settings for YouTube",
+    "message": "Autoplay Settings for YouTube™",
     "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Disable autoplay on YouTube™ and save your autoplay settings between sessions.",
+    "description": "Description of the extension."
   }
 }

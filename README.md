@@ -1,5 +1,5 @@
 <p align="center"><img src="https://i.imgur.com/GY24C1W.png"></p>
-<h1 align="center">YouTube Autoplay</h1>
+<h1 align="center">Autoplay Settings for YouTube</h1>
 
 <p align="center">
   </br></br>
@@ -14,14 +14,16 @@
 
 ## Supporting the Project
 
-The continued development of YouTube Autoplay is made possible
+The continued development of Autoplay Settings for YouTube is made possible
 thanks to the support of awesome backers. If you'd like to join them,
-please consider contributing with [Patreon](https://goo.gl/qRhKSW),
-[PayPal](https://goo.gl/5FnBaw) or [Bitcoin](https://goo.gl/uJUAaU).
+please consider contributing with
+[Patreon](https://armin.dev/go/patreon?pr=video-autoplay&src=repo),
+[PayPal](https://armin.dev/go/paypal?pr=video-autoplay&src=repo) or
+[Bitcoin](https://armin.dev/go/bitcoin?pr=video-autoplay&src=repo).
 
 ## Description
 
-YouTube Autoplay is a browser extension that disables
+Autoplay Settings for YouTube is a browser extension that disables
 the automatic playback of the next video on YouTube, and remembers
 your autoplay settings between sessions.
 
@@ -33,5 +35,5 @@ your autoplay settings between sessions.
 
 ## License
 
-YouTube Autoplay is released under the terms of the MIT License.
+Autoplay Settings for YouTube is released under the terms of the MIT License.
 Please refer to the LICENSE file.
