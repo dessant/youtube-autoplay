@@ -17,9 +17,9 @@
 The continued development of Autoplay Settings for YouTube is made possible
 thanks to the support of awesome backers. If you'd like to join them,
 please consider contributing with
-[Patreon](https://armin.dev/go/patreon?pr=video-autoplay&src=repo),
-[PayPal](https://armin.dev/go/paypal?pr=video-autoplay&src=repo) or
-[Bitcoin](https://armin.dev/go/bitcoin?pr=video-autoplay&src=repo).
+[Patreon](https://armin.dev/go/patreon?pr=youtube-autoplay&src=repo),
+[PayPal](https://armin.dev/go/paypal?pr=youtube-autoplay&src=repo) or
+[Bitcoin](https://armin.dev/go/bitcoin?pr=youtube-autoplay&src=repo).
 
 ## Description
 
