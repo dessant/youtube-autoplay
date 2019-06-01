@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/dessant/youtube-autoplay/compare/v0.5.0...v0.5.1) (2019-06-01)
+
+
+### Bug Fixes
+
+* remove @material/theme direct dependency ([761f61c](https://github.com/dessant/youtube-autoplay/commit/761f61c))
+
+
+
 ## [0.5.0](https://github.com/dessant/youtube-autoplay/compare/v0.4.0...v0.5.0) (2019-06-01)
 
 
