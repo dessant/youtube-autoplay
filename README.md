@@ -4,7 +4,7 @@
 <p align="center">
   </br></br>
   <a href="https://chrome.google.com/webstore/detail/youtube-autoplay/gebbpmioaihpifcknpcjeielgfhaiecf">
-    <img src="https://i.imgur.com/q6E8SOD.png" alt="Chrome Web Store"></a>
+    <img src="https://i.imgur.com/B0i5sn3.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube_autoplay/">
     <img src="https://i.imgur.com/dvof8rG.png" alt="Firefox add-ons"></a>
   <a href="">
