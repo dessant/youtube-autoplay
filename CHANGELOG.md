@@ -1,6 +1,17 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.4.0](https://github.com/dessant/youtube-autoplay/compare/v0.3.1...v0.4.0) (2019-06-01)
+
+
+### Features
+
+* add option to control autoplay for playlists ([1665419](https://github.com/dessant/youtube-autoplay/commit/1665419))
+* build with travis ([f2f1eb2](https://github.com/dessant/youtube-autoplay/commit/f2f1eb2))
+* change name ([04c1c58](https://github.com/dessant/youtube-autoplay/commit/04c1c58))
+
+
 
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/dessant/youtube-autoplay/compare/v0.3.0...v0.3.1) (2018-12-07)
