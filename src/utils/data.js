@@ -1,3 +1,3 @@
-const optionKeys = ['autoplay'];
+const optionKeys = ['autoplay', 'autoplayPlaylist'];
 
 export {optionKeys};

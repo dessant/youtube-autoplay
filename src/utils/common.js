@@ -49,4 +49,45 @@ async function updateCookie(cookie, url, changes) {
   await browser.cookies.set(newCookie);
 }
 
-export {getText, executeCode, executeFile, updateCookie};
+function waitForElement(selector, {timeout = 10000} = {}) {
+  return new Promise(resolve => {
+    const el = document.querySelector(selector);
+    if (el) {
+      resolve(el);
+      return;
+    }
+
+    const observer = new MutationObserver(function(mutations, obs) {
+      const el = document.querySelector(selector);
+      if (el) {
+        obs.disconnect();
+        window.clearTimeout(timeoutId);
+        resolve(el);
+      }
+    });
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true
+    });
+
+    const timeoutId = window.setTimeout(function() {
+      observer.disconnect();
+      resolve();
+    }, timeout);
+  });
+}
+
+async function isAndroid() {
+  const {os} = await browser.runtime.getPlatformInfo();
+  return os === 'android';
+}
+
+export {
+  getText,
+  executeCode,
+  executeFile,
+  updateCookie,
+  waitForElement,
+  isAndroid
+};

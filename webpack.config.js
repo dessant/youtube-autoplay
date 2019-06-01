@@ -27,6 +27,7 @@ module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
     background: './src/background/main.js',
+    autoplay: './src/autoplay/main.js',
     options: './src/options/main.js'
   },
   output: {

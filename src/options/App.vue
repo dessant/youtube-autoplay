@@ -9,6 +9,12 @@
           <v-switch id="ap" v-model="options.autoplay"></v-switch>
         </v-form-field>
       </div>
+      <div class="option" v-if="!isAndroid">
+        <v-form-field input-id="app"
+            :label="getText('optionTitle_autoplayPlaylist')">
+          <v-switch id="app" v-model="options.autoplayPlaylist"></v-switch>
+        </v-form-field>
+      </div>
     </div>
   </div>
 </div>
@@ -19,7 +25,7 @@ import browser from 'webextension-polyfill';
 import {FormField, Switch} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getText} from 'utils/common';
+import {getText, isAndroid} from 'utils/common';
 import {optionKeys} from 'utils/data';
 
 export default {
@@ -32,8 +38,11 @@ export default {
     return {
       dataLoaded: false,
 
+      isAndroid: false,
+
       options: {
-        autoplay: false
+        autoplay: false,
+        autoplayPlaylist: false
       }
     };
   },
@@ -56,6 +65,8 @@ export default {
       getText('pageTitle_options'),
       getText('extensionName')
     ]);
+
+    this.isAndroid = await isAndroid();
 
     this.dataLoaded = true;
   }

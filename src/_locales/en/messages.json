@@ -10,7 +10,12 @@
   },
 
   "optionTitle_autoplay": {
-    "message": "Autoplay videos",
+    "message": "Autoplay next video",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_autoplayPlaylist": {
+    "message": "Autoplay next video in playlist",
     "description": "Title of the option."
   },
 
