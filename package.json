@@ -36,7 +36,6 @@
     "Opera >= 42"
   ],
   "dependencies": {
-    "@material/theme": "^1.1.0",
     "@material/typography": "^2.3.0",
     "ext-components": "dessant/ext-components#^0.2.1",
     "storage-versions": "dessant/storage-versions#^0.2.5",
