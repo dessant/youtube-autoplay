@@ -79,33 +79,42 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/typography/mixins';
 
 body {
-  min-width: 600px;
-  min-height: 200px;
+  margin: 0;
   @include mdc-typography-base;
   font-size: 100%;
   background-color: #ffffff;
   overflow: visible !important;
 }
 
-.mdc-switch {
-  margin-right: 12px;
-}
-
 #app {
   display: grid;
   grid-row-gap: 32px;
-  padding: 12px;
+  padding: 24px;
+}
+
+.mdc-switch {
+  margin-right: 16px;
 }
 
 .option-wrap {
   display: grid;
-  grid-row-gap: 12px;
-  padding-top: 16px;
+  grid-row-gap: 24px;
+  grid-auto-columns: min-content;
 }
 
 .option {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 24px;
+
+  & .mdc-form-field {
+    max-width: calc(100vw - 48px);
+
+    & label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 }
 </style>
