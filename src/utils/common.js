@@ -78,16 +78,4 @@ function waitForElement(selector, {timeout = 10000} = {}) {
   });
 }
 
-async function isAndroid() {
-  const {os} = await browser.runtime.getPlatformInfo();
-  return os === 'android';
-}
-
-export {
-  getText,
-  executeCode,
-  executeFile,
-  updateCookie,
-  waitForElement,
-  isAndroid
-};
+export {getText, executeCode, executeFile, updateCookie, waitForElement};
