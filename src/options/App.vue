@@ -1,23 +1,23 @@
-<!-- prettier-ignore -->
 <template>
-<div id="app" v-if="dataLoaded">
-  <div class="section">
-    <div class="option-wrap">
-      <div class="option">
-        <v-form-field input-id="ap"
-            :label="getText('optionTitle_autoplay')">
-          <v-switch id="ap" v-model="options.autoplay"></v-switch>
-        </v-form-field>
-      </div>
-      <div class="option" v-if="!isAndroid">
-        <v-form-field input-id="app"
-            :label="getText('optionTitle_autoplayPlaylist')">
-          <v-switch id="app" v-model="options.autoplayPlaylist"></v-switch>
-        </v-form-field>
+  <div id="app" v-if="dataLoaded">
+    <div class="section">
+      <div class="option-wrap">
+        <div class="option">
+          <v-form-field input-id="ap" :label="getText('optionTitle_autoplay')">
+            <v-switch id="ap" v-model="options.autoplay"></v-switch>
+          </v-form-field>
+        </div>
+        <div class="option" v-if="!isAndroid">
+          <v-form-field
+            input-id="app"
+            :label="getText('optionTitle_autoplayPlaylist')"
+          >
+            <v-switch id="app" v-model="options.autoplayPlaylist"></v-switch>
+          </v-form-field>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
