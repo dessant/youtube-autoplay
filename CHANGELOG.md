@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/dessant/youtube-autoplay/compare/v0.5.1...v1.0.0) (2020-01-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* mobile version no longer supported, browser versions before
+Chrome 76, Firefox 68 and Opera 63
+are no longer supported
+
+### Bug Fixes
+
+* adjust options page layout ([d2182c4](https://github.com/dessant/youtube-autoplay/commit/d2182c476efd0615a0b6e911a8c304052a2c7a22))
+* set pref cookie ([32a5558](https://github.com/dessant/youtube-autoplay/commit/32a5558b6f19451558cd5fd3971b4156b3adf525))
+
 ### [0.5.1](https://github.com/dessant/youtube-autoplay/compare/v0.5.0...v0.5.1) (2019-06-01)
 
 
