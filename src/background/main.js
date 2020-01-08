@@ -10,7 +10,6 @@ async function onCookie(changeInfo) {
   if (
     cookie.domain === '.youtube.com' &&
     cookie.name === 'PREF' &&
-    changeInfo.cause === 'explicit' &&
     !changeInfo.removed
   ) {
     const {autoplay} = await storage.get('autoplay', 'sync');
@@ -44,7 +43,7 @@ async function syncState(autoplay) {
     var {autoplay} = await storage.get('autoplay', 'sync');
   }
 
-  const tabs = await browser.tabs.query({url: 'https://*.youtube.com/*'});
+  const tabs = await browser.tabs.query({url: 'https://www.youtube.com/*'});
   for (const tab of tabs) {
     const tabId = tab.id;
     if (await executeCode(`typeof setSwitchState === 'undefined'`, tabId)) {
@@ -53,28 +52,17 @@ async function syncState(autoplay) {
     await executeCode(`setSwitchState(${autoplay})`, tabId);
   }
 
-  let firstPartySupport;
-  if (targetEnv === 'firefox') {
-    const {version} = await browser.runtime.getBrowserInfo();
-    if (parseInt(version.slice(0, 2), 10) >= 58) {
-      firstPartySupport = true;
-    }
-  }
-
   const stores = await browser.cookies.getAllCookieStores();
   for (const store of stores) {
     const params = {
-      url: 'https://www.youtube.com/',
-      domain: '.youtube.com',
+      domain: 'youtube.com',
       name: 'PREF',
       storeId: store.id
     };
-    if (firstPartySupport) {
+    if (targetEnv === 'firefox') {
       params.firstPartyDomain = null;
     }
     const cookies = await browser.cookies.getAll(params);
-    params.url = 'https://m.youtube.com/';
-    cookies.push(...(await browser.cookies.getAll(params)));
 
     for (const cookie of cookies) {
       const value = new URLSearchParams(cookie.value);

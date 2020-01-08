@@ -22,7 +22,6 @@
     "build:prod:zip:all": "run-s 'build:prod:zip:@(chrome|firefox|opera)'",
     "start:chrome": "web-ext run -s dist/chrome -t chromium",
     "start:firefox": "web-ext run -s dist/firefox -t firefox-desktop",
-    "start:android": "web-ext run -s dist/firefox -t firefox-android",
     "exec": "run-s build:firefox start",
     "exec:prod": "run-s build:prod:firefox start",
     "inspect": "cross-env NODE_ENV=production gulp inspect",
@@ -31,14 +30,14 @@
     "release": "standard-version"
   },
   "browserslist": [
-    "Chrome >= 55",
-    "Firefox >= 52",
-    "FirefoxAndroid >= 57",
-    "Opera >= 42"
+    "Chrome >= 76",
+    "Firefox >= 68",
+    "Opera >= 63"
   ],
   "dependencies": {
     "@material/typography": "^4.0.0",
     "ext-components": "dessant/ext-components#^0.4.0",
+    "js-cookie": "^2.2.1",
     "storage-versions": "dessant/storage-versions#^0.2.6",
     "typeface-roboto": "^0.0.75",
     "vue": "^2.6.11",

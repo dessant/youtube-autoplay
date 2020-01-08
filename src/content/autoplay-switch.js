@@ -4,18 +4,6 @@ function setSwitchState(on) {
     oldSwitch.checked = on;
   }
 
-  const mobileSwitch = document.querySelector('button[aria-label="Autoplay"]');
-  if (mobileSwitch) {
-    let pressed = mobileSwitch.getAttribute('aria-pressed');
-    if (['true', 'false'].includes(pressed)) {
-      pressed = JSON.parse(pressed);
-
-      if (mobileSwitch && on !== pressed) {
-        mobileSwitch.click();
-      }
-    }
-  }
-
   const newSwitches = document.querySelectorAll(
     'paper-toggle-button#toggle, paper-toggle-button#improved-toggle'
   );

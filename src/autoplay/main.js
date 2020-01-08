@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import Cookies from 'js-cookie';
 
 import storage from 'storage/storage';
 import {waitForElement} from 'utils/common';
@@ -28,14 +29,17 @@ function syncPlaylistAutoplay(autoplay) {
   script.remove();
 }
 
-async function init() {
-  const {autoplayPlaylist} = await storage.get('autoplayPlaylist', 'sync');
-
+async function initSync() {
   browser.storage.onChanged.addListener(onStorageChange);
 
+  const {autoplayPlaylist} = await storage.get('autoplayPlaylist', 'sync');
   if (!autoplayPlaylist) {
     syncPlaylistAutoplay(autoplayPlaylist);
   }
 }
 
-init();
+if (!Cookies.get('PREF')) {
+  Cookies.set('PREF', '', {domain: '.youtube.com', expires: 730});
+}
+
+initSync();

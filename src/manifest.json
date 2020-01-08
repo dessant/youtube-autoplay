@@ -10,13 +10,13 @@
   "applications": {
     "gecko": {
       "id": "{14e605a0-6fdd-43e9-891a-29f6e481db24}",
-      "strict_min_version": "52.0"
+      "strict_min_version": "68.0"
     }
   },
-  "minimum_chrome_version": "55.0",
-  "minimum_opera_version": "42.0",
+  "minimum_chrome_version": "76.0",
+  "minimum_opera_version": "63.0",
 
-  "permissions": ["cookies", "storage", "tabs", "<all_urls>"],
+  "permissions": ["cookies", "storage", "tabs", "*://*.youtube.com/*"],
 
   "content_security_policy": "default-src 'self'; img-src 'self' data:; object-src 'none'; connect-src 'none';",
 
@@ -45,12 +45,8 @@
 
   "content_scripts": [
     {
-      "matches": [
-        "*://www.youtube.com/*list=*",
-        "*://www.youtube-nocookie.com/*list=*"
-      ],
-      "all_frames": true,
-      "run_at": "document_end",
+      "matches": ["*://www.youtube.com/*"],
+      "run_at": "document_start",
       "js": ["src/manifest.js", "src/autoplay/script.js"]
     }
   ]
