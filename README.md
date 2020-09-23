@@ -6,7 +6,7 @@
   <a href="https://chrome.google.com/webstore/detail/aogbgdnkcjgamgglpikcenliinchedel">
     <img src="https://i.imgur.com/B0i5sn3.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube_autoplay/">
-    <img src="https://i.imgur.com/dvof8rG.png" alt="Firefox add-ons"></a>
+    <img src="https://i.imgur.com/kMH6r1a.png" alt="Firefox add-ons"></a>
   <a href="https://microsoftedge.microsoft.com/addons/detail/jeojbmbfnebmodmblljdmmbbfliolkgd">
     <img src="https://i.imgur.com/n49Wiu2.png" alt="Microsoft Store"></a>
   </br></br>
@@ -30,7 +30,7 @@ your autoplay settings between sessions.
 ## Screenshots
 
 <p>
-  <img width="420" src="https://i.imgur.com/8JyDNCr.png">
+  <img width="414" src="https://i.imgur.com/8JyDNCr.png">
 </p>
 
 ## License
