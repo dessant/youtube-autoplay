@@ -1,14 +1,14 @@
-<p align="center"><img src="https://i.imgur.com/GY24C1W.png"></p>
+<p align="center"><img width="128" height="128" src="https://i.imgur.com/eW7QUjU.png"></p>
 <h1 align="center">Autoplay Settings for YouTube</h1>
 
 <p align="center">
   </br></br>
   <a href="https://chrome.google.com/webstore/detail/aogbgdnkcjgamgglpikcenliinchedel">
-    <img src="https://i.imgur.com/B0i5sn3.png" alt="Chrome Web Store"></a>
+    <img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube_autoplay/">
-    <img src="https://i.imgur.com/kMH6r1a.png" alt="Firefox add-ons"></a>
+    <img height="58" src="https://i.imgur.com/2jJOtTI.png" alt="Firefox add-ons"></a>
   <a href="https://microsoftedge.microsoft.com/addons/detail/jeojbmbfnebmodmblljdmmbbfliolkgd">
-    <img src="https://i.imgur.com/n49Wiu2.png" alt="Microsoft Store"></a>
+    <img height="58" src="https://i.imgur.com/es2YFRA.png" alt="Microsoft Store"></a>
   </br></br>
 </p>
 
@@ -35,7 +35,7 @@ your autoplay settings between sessions.
 
 ## License
 
-Copyright (c) 2018-2020 Armin Sebastian
+Copyright (c) 2018-2021 Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for further information.
