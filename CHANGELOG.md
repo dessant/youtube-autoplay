@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/dessant/youtube-autoplay/compare/v1.0.1...v1.0.2) (2021-12-16)
+
+
+### Bug Fixes
+
+* toggle new player switch ([f073605](https://github.com/dessant/youtube-autoplay/commit/f073605282ecdc8158b9d62274ea8a6c3e688384))
+
 ### [1.0.1](https://github.com/dessant/youtube-autoplay/compare/v1.0.0...v1.0.1) (2020-01-21)
 
 ## [1.0.0](https://github.com/dessant/youtube-autoplay/compare/v0.5.1...v1.0.0) (2020-01-08)
