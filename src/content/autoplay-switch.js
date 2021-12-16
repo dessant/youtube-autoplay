@@ -12,4 +12,14 @@ function setSwitchState(on) {
       node.click();
     }
   }
+
+  const playerSwitch = document.querySelector(
+    'button[data-tooltip-target-id="ytp-autonav-toggle-button"]'
+  );
+  if (playerSwitch) {
+    const isOn = playerSwitch.querySelector('[aria-checked="true"]') !== null;
+    if (on !== isOn) {
+      playerSwitch.click();
+    }
+  }
 }

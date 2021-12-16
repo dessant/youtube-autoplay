@@ -40,7 +40,7 @@ async function onCookie(changeInfo) {
 
 async function syncState(autoplay) {
   if (!autoplay) {
-    var {autoplay} = await storage.get('autoplay', 'sync');
+    ({autoplay} = await storage.get('autoplay', 'sync'));
   }
 
   const tabs = await browser.tabs.query({url: 'https://www.youtube.com/*'});
@@ -100,11 +100,11 @@ function addStorageListener() {
   browser.storage.onChanged.addListener(onStorageChange);
 }
 
-async function onLoad() {
+async function init() {
   await initStorage('sync');
   await syncState();
   addStorageListener();
   addCookieListener();
 }
 
-document.addEventListener('DOMContentLoaded', onLoad);
+init();
