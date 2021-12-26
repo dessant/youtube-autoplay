@@ -5,39 +5,43 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const storageRevisions = require('./src/storage/config.json').revisions;
+
 const targetEnv = process.env.TARGET_ENV || 'firefox';
 const isProduction = process.env.NODE_ENV === 'production';
 
-let plugins = [
+const plugins = [
   new webpack.DefinePlugin({
     'process.env': {
-      TARGET_ENV: JSON.stringify(targetEnv)
-    },
-    global: {}
+      TARGET_ENV: JSON.stringify(targetEnv),
+      STORAGE_REVISION_LOCAL: JSON.stringify(
+        storageRevisions.local[storageRevisions.local.length - 1]
+      )
+    }
+  }),
+  new webpack.ProvidePlugin({
+    Buffer: ['buffer', 'Buffer']
   }),
   new VueLoaderPlugin(),
   new MiniCssExtractPlugin({
     filename: '[name]/style.css'
   }),
   isProduction ? new LodashModuleReplacementPlugin({shorthands: true}) : null
-];
-plugins = plugins.filter(Boolean);
+].filter(Boolean);
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
   entry: {
     background: './src/background/main.js',
-    autoplay: './src/autoplay/main.js',
+    insert: './src/insert/main.js',
+    content: './src/content/main.js',
     options: './src/options/main.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist', targetEnv, 'src'),
-    chunkFilename: '[name]/script.js'
+    filename: '[name]/script.js'
   },
   optimization: {
-    runtimeChunk: {
-      name: 'manifest'
-    },
     splitChunks: {
       cacheGroups: {
         default: false
@@ -63,7 +67,10 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              includePaths: ['node_modules']
+              sassOptions: {
+                includePaths: ['node_modules'],
+                quietDeps: true
+              }
             }
           }
         ]
@@ -72,7 +79,8 @@ module.exports = {
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    extensions: ['.js', '.json', '.css', '.scss', '.vue']
+    extensions: ['.js', '.json', '.css', '.scss', '.vue'],
+    fallback: {fs: false}
   },
   devtool: false,
   plugins

@@ -14,12 +14,4 @@ async function upgrade() {
   return storage.set(changes);
 }
 
-async function downgrade() {
-  const changes = {};
-  await storage.remove(['installTime', 'autoplayPlaylist']);
-
-  changes.storageVersion = downRevision;
-  return storage.set(changes);
-}
-
-export {message, revision, upgrade, downgrade};
+export {message, revision, upgrade};

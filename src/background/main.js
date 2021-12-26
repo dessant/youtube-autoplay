@@ -1,53 +1,21 @@
 import browser from 'webextension-polyfill';
 
-import {initStorage} from 'storage/init';
+import {initStorage, migrateLegacyStorage} from 'storage/init';
+import {isStorageReady} from 'storage/storage';
 import storage from 'storage/storage';
 import {executeCode, executeFile, updateCookie} from 'utils/common';
 import {targetEnv} from 'utils/config';
 
-async function onCookie(changeInfo) {
-  const cookie = changeInfo.cookie;
-  if (
-    cookie.domain === '.youtube.com' &&
-    cookie.name === 'PREF' &&
-    !changeInfo.removed
-  ) {
-    const {autoplay} = await storage.get('autoplay', 'sync');
-
-    // old layout values ('f5') - initial (on): 30, on: 20030, off: 30030
-    // new layout values ('f5') - initial (on): none, on: 200(0|3)0, off: 300(0|3)0
-    const value = new URLSearchParams(cookie.value);
-    const autoplayValue = value.get('f5');
-
-    if (autoplay && ['30000', '30030'].includes(autoplayValue)) {
-      return await storage.set({autoplay: false}, 'sync');
-    }
-
-    if (!autoplay) {
-      if ([null, '30'].includes(autoplayValue)) {
-        value.set('f5', '30000');
-        return await updateCookie(cookie, 'https://www.youtube.com/', {
-          value: value.toString()
-        });
-      }
-
-      if (['20000', '20030'].includes(autoplayValue)) {
-        return await storage.set({autoplay: true}, 'sync');
-      }
-    }
-  }
-}
-
 async function syncState(autoplay) {
   if (!autoplay) {
-    ({autoplay} = await storage.get('autoplay', 'sync'));
+    ({autoplay} = await storage.get('autoplay'));
   }
 
   const tabs = await browser.tabs.query({url: 'https://www.youtube.com/*'});
   for (const tab of tabs) {
     const tabId = tab.id;
     if (await executeCode(`typeof setSwitchState === 'undefined'`, tabId)) {
-      await executeFile('/src/content/autoplay-switch.js', tabId);
+      await executeFile('/src/content/script.js', tabId);
     }
     await executeCode(`setSwitchState(${autoplay})`, tabId);
   }
@@ -86,25 +54,69 @@ async function syncState(autoplay) {
   }
 }
 
+async function onCookieChange(changeInfo) {
+  const cookie = changeInfo.cookie;
+  if (
+    cookie.domain === '.youtube.com' &&
+    cookie.name === 'PREF' &&
+    !changeInfo.removed
+  ) {
+    const {autoplay} = await storage.get('autoplay');
+
+    // old layout values ('f5') - initial (on): 30, on: 20030, off: 30030
+    // new layout values ('f5') - initial (on): none, on: 200(0|3)0, off: 300(0|3)0
+    const value = new URLSearchParams(cookie.value);
+    const autoplayValue = value.get('f5');
+
+    if (autoplay && ['30000', '30030'].includes(autoplayValue)) {
+      return await storage.set({autoplay: false});
+    }
+
+    if (!autoplay) {
+      if ([null, '30'].includes(autoplayValue)) {
+        value.set('f5', '30000');
+        return await updateCookie(cookie, 'https://www.youtube.com/', {
+          value: value.toString()
+        });
+      }
+
+      if (['20000', '20030'].includes(autoplayValue)) {
+        return await storage.set({autoplay: true});
+      }
+    }
+  }
+}
+
 async function onStorageChange(changes, area) {
-  if (changes.autoplay) {
-    await syncState(changes.autoplay.newValue);
+  if (area === 'local' && (await isStorageReady())) {
+    if (changes.autoplay) {
+      await syncState(changes.autoplay.newValue);
+    }
   }
 }
 
 function addCookieListener() {
-  browser.cookies.onChanged.addListener(onCookie);
+  browser.cookies.onChanged.addListener(onCookieChange);
 }
 
 function addStorageListener() {
   browser.storage.onChanged.addListener(onStorageChange);
 }
 
-async function init() {
-  await initStorage('sync');
+async function setup() {
+  if (!(await isStorageReady())) {
+    await migrateLegacyStorage();
+    await initStorage();
+  }
+
   await syncState();
+}
+
+function init() {
   addStorageListener();
   addCookieListener();
+
+  setup();
 }
 
 init();

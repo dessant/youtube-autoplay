@@ -16,8 +16,4 @@ async function upgrade() {
   return storage.set(changes);
 }
 
-async function downgrade() {
-  return storage.clear();
-}
-
-export {message, revision, upgrade, downgrade};
+export {message, revision, upgrade};

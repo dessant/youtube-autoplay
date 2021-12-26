@@ -30,7 +30,7 @@ your autoplay settings between sessions.
 ## Screenshots
 
 <p>
-  <img width="414" src="https://i.imgur.com/8JyDNCr.png">
+  <img width="380" src="https://i.imgur.com/8JyDNCr.png">
 </p>
 
 ## License

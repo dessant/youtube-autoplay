@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 400;
   src: local('Roboto'), local('Roboto-Regular'),
-    url('./files/roboto-latin-400.woff2') format('woff2');
+    url('./files/roboto-latin-400-normal.woff2') format('woff2');
 }
 
 @font-face {
@@ -11,5 +11,5 @@
   font-style: normal;
   font-weight: 500;
   src: local('Roboto Medium'), local('Roboto-Medium'),
-    url('./files/roboto-latin-500.woff2') format('woff2');
+    url('./files/roboto-latin-500-normal.woff2') format('woff2');
 }

@@ -1,4 +1,4 @@
-function setSwitchState(on) {
+self.setSwitchState = function(on) {
   const oldSwitch = document.querySelector('input#autoplay-checkbox');
   if (oldSwitch && on !== oldSwitch.checked) {
     oldSwitch.checked = on;
@@ -22,4 +22,4 @@ function setSwitchState(on) {
       playerSwitch.click();
     }
   }
-}
+};

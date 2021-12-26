@@ -1,12 +1,15 @@
 import browser from 'webextension-polyfill';
 import Cookies from 'js-cookie';
 
+import {isStorageReady} from 'storage/storage';
 import storage from 'storage/storage';
 import {waitForElement} from 'utils/common';
 
-function onStorageChange(changes, area) {
-  if (changes.autoplayPlaylist) {
-    syncPlaylistAutoplay(changes.autoplayPlaylist.newValue);
+async function onStorageChange(changes, area) {
+  if (area === 'local' && (await isStorageReady())) {
+    if (changes.autoplayPlaylist) {
+      syncPlaylistAutoplay(changes.autoplayPlaylist.newValue);
+    }
   }
 }
 
@@ -32,7 +35,7 @@ function syncPlaylistAutoplay(autoplay) {
 async function initSync() {
   browser.storage.onChanged.addListener(onStorageChange);
 
-  const {autoplayPlaylist} = await storage.get('autoplayPlaylist', 'sync');
+  const {autoplayPlaylist} = await storage.get('autoplayPlaylist');
   if (!autoplayPlaylist) {
     syncPlaylistAutoplay(autoplayPlaylist);
   }

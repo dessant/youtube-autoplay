@@ -1,3 +1,5 @@
 const targetEnv = process.env.TARGET_ENV;
 
-export {targetEnv};
+const storageRevisions = {local: process.env.STORAGE_REVISION_LOCAL};
+
+export {targetEnv, storageRevisions};
