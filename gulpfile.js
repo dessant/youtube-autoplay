@@ -1,6 +1,12 @@
-const path = require('path');
-const {exec} = require('child_process');
-const {lstatSync, readdirSync, readFileSync, writeFileSync} = require('fs');
+const path = require('node:path');
+const {exec} = require('node:child_process');
+const {
+  lstatSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  rmSync
+} = require('node:fs');
 
 const {series, parallel, src, dest} = require('gulp');
 const postcss = require('gulp-postcss');
@@ -9,20 +15,29 @@ const jsonMerge = require('gulp-merge-json');
 const jsonmin = require('gulp-jsonmin');
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
-const del = require('del');
 const {ensureDirSync} = require('fs-extra');
 const sharp = require('sharp');
 
-const targetEnv = process.env.TARGET_ENV || 'firefox';
+const targetEnv = process.env.TARGET_ENV || 'chrome';
 const isProduction = process.env.NODE_ENV === 'production';
-const distDir = path.join('dist', targetEnv);
+const enableContributions =
+  (process.env.ENABLE_CONTRIBUTIONS || 'true') === 'true';
+const distDir = path.join(__dirname, 'dist', targetEnv);
 
-function clean() {
-  return del([distDir]);
+function initEnv() {
+  process.env.BROWSERSLIST_ENV = targetEnv;
+}
+
+function init(done) {
+  initEnv();
+
+  rmSync(distDir, {recursive: true, force: true});
+  ensureDirSync(distDir);
+  done();
 }
 
 function js(done) {
-  exec('webpack-cli build --color', function(err, stdout, stderr) {
+  exec('webpack-cli build --color', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     done(err);
@@ -30,7 +45,12 @@ function js(done) {
 }
 
 function html() {
-  return src('src/**/*.html', {base: '.'})
+  return src(
+    enableContributions
+      ? 'src/**/*.html'
+      : ['src/**/*.html', '!src/contribute/*.html'],
+    {base: '.'}
+  )
     .pipe(gulpif(isProduction, htmlmin({collapseWhitespace: true})))
     .pipe(dest(distDir));
 }
@@ -39,6 +59,9 @@ async function images(done) {
   ensureDirSync(path.join(distDir, 'src/assets/icons/app'));
   const appIconSvg = readFileSync('src/assets/icons/app/icon.svg');
   const appIconSizes = [16, 19, 24, 32, 38, 48, 64, 96, 128];
+  if (targetEnv === 'safari') {
+    appIconSizes.push(256, 512, 1024);
+  }
   for (const size of appIconSizes) {
     await sharp(appIconSvg, {density: (72 * size) / 24})
       .resize(size)
@@ -50,6 +73,24 @@ async function images(done) {
       src(path.join(distDir, 'src/assets/icons/app/*.png'), {base: '.'})
         .pipe(imagemin())
         .pipe(dest('.'))
+        .on('error', done)
+        .on('finish', resolve);
+    });
+  }
+
+  await new Promise(resolve => {
+    src('src/assets/icons/@(app|misc)/*.@(png|svg)', {base: '.'})
+      .pipe(gulpif(isProduction, imagemin()))
+      .pipe(dest(distDir))
+      .on('error', done)
+      .on('finish', resolve);
+  });
+
+  if (enableContributions) {
+    await new Promise(resolve => {
+      src('node_modules/vueton/components/contribute/assets/*.@(png|svg)')
+        .pipe(gulpif(isProduction, imagemin()))
+        .pipe(dest(path.join(distDir, 'src/contribute/assets')))
         .on('error', done)
         .on('finish', resolve);
     });
@@ -67,7 +108,7 @@ async function fonts(done) {
 
   await new Promise(resolve => {
     src(
-      'node_modules/@fontsource/roboto/files/roboto-latin-@(400|500)-normal.woff2'
+      'node_modules/@fontsource/roboto/files/roboto-latin-@(400|500|700)-normal.woff2'
     )
       .pipe(dest(path.join(distDir, 'src/assets/fonts/files')))
       .on('error', done)
@@ -77,7 +118,7 @@ async function fonts(done) {
 
 async function locale(done) {
   const localesRootDir = path.join(__dirname, 'src/assets/locales');
-  const localeDirs = readdirSync(localesRootDir).filter(function(file) {
+  const localeDirs = readdirSync(localesRootDir).filter(function (file) {
     return lstatSync(path.join(localesRootDir, file)).isDirectory();
   });
   for (const localeDir of localeDirs) {
@@ -128,7 +169,7 @@ function manifest() {
     .pipe(dest(distDir));
 }
 
-function license(done) {
+function license() {
   let year = '2018';
   const currentYear = new Date().getFullYear().toString();
   if (year !== currentYear) {
@@ -143,13 +184,13 @@ See the LICENSE file for further information.
 `;
 
   writeFileSync(path.join(distDir, 'NOTICE'), notice);
-  return src(['LICENSE']).pipe(dest(distDir));
+  return src('LICENSE').pipe(dest(distDir));
 }
 
 function zip(done) {
   exec(
-    `web-ext build -s dist/${targetEnv} -a artifacts/${targetEnv} -n '{name}-{version}-${targetEnv}.zip' --overwrite-dest`,
-    function(err, stdout, stderr) {
+    `web-ext build -s dist/${targetEnv} -a artifacts/${targetEnv} -n "{name}-{version}-${targetEnv}.zip" --overwrite-dest`,
+    function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
       done(err);
@@ -158,9 +199,14 @@ function zip(done) {
 }
 
 function inspect(done) {
+  initEnv();
+
   exec(
-    `webpack --profile --json > report.json && webpack-bundle-analyzer report.json dist/firefox/src && sleep 10 && rm report.{json,html}`,
-    function(err, stdout, stderr) {
+    `npm run build:prod:chrome && \
+    webpack --profile --json > report.json && \
+    webpack-bundle-analyzer --mode static report.json dist/chrome/src && \
+    sleep 3 && rm report.{json,html}`,
+    function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
       done(err);
@@ -169,7 +215,7 @@ function inspect(done) {
 }
 
 exports.build = series(
-  clean,
+  init,
   parallel(js, html, images, fonts, locale, manifest, license)
 );
 exports.zip = zip;

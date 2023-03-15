@@ -1,5 +1,4 @@
 /.assets/
-/app/
 
 node_modules/
 /artifacts/
@@ -12,3 +11,4 @@ node_modules/
 /npm-debug.log
 
 /report.json
+/report.html

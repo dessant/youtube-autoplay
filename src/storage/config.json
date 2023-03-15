@@ -1,6 +1,10 @@
 {
   "revisions": {
-    "local": ["HZQD8wqaz", "FoFb8yK2D"],
+    "local": [
+      "HZQD8wqaz",
+      "FoFb8yK2D",
+      "20230311075441_add_theme_support"
+    ],
     "sync": []
   }
 }

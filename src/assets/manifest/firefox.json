@@ -10,13 +10,13 @@
   "applications": {
     "gecko": {
       "id": "{14e605a0-6fdd-43e9-891a-29f6e481db24}",
-      "strict_min_version": "68.0"
+      "strict_min_version": "91.0"
     }
   },
 
   "permissions": ["cookies", "storage", "tabs", "*://*.youtube.com/*"],
 
-  "content_security_policy": "default-src 'self'; img-src 'self' data:; object-src 'none'; connect-src 'none';",
+  "content_security_policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src *; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none';",
 
   "icons": {
     "16": "src/assets/icons/app/icon-16.png",
@@ -28,6 +28,20 @@
     "64": "src/assets/icons/app/icon-64.png",
     "96": "src/assets/icons/app/icon-96.png",
     "128": "src/assets/icons/app/icon-128.png"
+  },
+
+  "browser_action": {
+    "default_icon": {
+      "16": "src/assets/icons/app/icon-16.png",
+      "19": "src/assets/icons/app/icon-19.png",
+      "24": "src/assets/icons/app/icon-24.png",
+      "32": "src/assets/icons/app/icon-32.png",
+      "38": "src/assets/icons/app/icon-38.png",
+      "48": "src/assets/icons/app/icon-48.png",
+      "64": "src/assets/icons/app/icon-64.png",
+      "96": "src/assets/icons/app/icon-96.png",
+      "128": "src/assets/icons/app/icon-128.png"
+    }
   },
 
   "options_ui": {

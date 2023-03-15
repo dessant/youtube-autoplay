@@ -1,3 +1,8 @@
-const optionKeys = ['autoplay', 'autoplayPlaylist'];
+const optionKeys = [
+  'autoplay',
+  'autoplayPlaylist',
+  'appTheme',
+  'showContribPage'
+];
 
 export {optionKeys};

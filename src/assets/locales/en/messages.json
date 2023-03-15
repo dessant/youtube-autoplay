@@ -9,6 +9,11 @@
     "description": "Description of the extension."
   },
 
+  "optionSectionTitle_general": {
+    "message": "General",
+    "description": "Title of the option section."
+  },
+
   "optionTitle_autoplay": {
     "message": "Autoplay next video",
     "description": "Title of the option."
@@ -17,6 +22,41 @@
   "optionTitle_autoplayPlaylist": {
     "message": "Autoplay next video in playlist",
     "description": "Title of the option."
+  },
+
+  "optionSectionTitle_misc": {
+    "message": "Miscellaneous",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_appTheme": {
+    "message": "Theme",
+    "description": "Title of the option."
+  },
+
+  "optionValue_appTheme_auto": {
+    "message": "System default",
+    "description": "Value of the option."
+  },
+
+  "optionValue_appTheme_light": {
+    "message": "Light",
+    "description": "Value of the option."
+  },
+
+  "optionValue_appTheme_dark": {
+    "message": "Dark",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_showContribPage": {
+    "message": "Show contribution page",
+    "description": "Title of the option."
+  },
+
+  "buttonLabel_contribute": {
+    "message": "Contribute",
+    "description": "Label of the button."
   },
 
   "pageTitle": {
@@ -36,6 +76,11 @@
 
   "pageTitle_options": {
     "message": "Options",
+    "description": "Title of the page."
+  },
+
+  "pageTitle_contribute": {
+    "message": "Contribute",
     "description": "Title of the page."
   }
 }

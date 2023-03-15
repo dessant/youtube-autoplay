@@ -1,114 +1,186 @@
 <template>
-  <div id="app" v-if="dataLoaded">
-    <div class="section">
+  <vn-app id="app" v-if="dataLoaded">
+    <div class="section-general">
+      <div class="section-title" v-once>
+        {{ getText('optionSectionTitle_general') }}
+      </div>
       <div class="option-wrap">
         <div class="option">
-          <v-form-field input-id="ap" :label="getText('optionTitle_autoplay')">
-            <v-switch id="ap" v-model="options.autoplay"></v-switch>
-          </v-form-field>
+          <vn-switch
+            :label="getText('optionTitle_autoplay')"
+            v-model="options.autoplay"
+          ></vn-switch>
         </div>
         <div class="option">
-          <v-form-field
-            input-id="app"
+          <vn-switch
             :label="getText('optionTitle_autoplayPlaylist')"
-          >
-            <v-switch id="app" v-model="options.autoplayPlaylist"></v-switch>
-          </v-form-field>
+            v-model="options.autoplayPlaylist"
+          ></vn-switch>
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="section-misc">
+      <div class="section-title" v-once>
+        {{ getText('optionSectionTitle_misc') }}
+      </div>
+      <div class="option-wrap">
+        <div class="option select">
+          <vn-select
+            :label="getText('optionTitle_appTheme')"
+            :items="listItems.appTheme"
+            v-model="options.appTheme"
+            transition="scale-transition"
+          >
+          </vn-select>
+        </div>
+        <div class="option" v-if="enableContributions">
+          <vn-switch
+            :label="getText('optionTitle_showContribPage')"
+            v-model="options.showContribPage"
+          ></vn-switch>
+        </div>
+        <div class="option button" v-if="enableContributions">
+          <vn-button
+            class="contribute-button vn-icon--start"
+            @click="showContribute"
+            ><vn-icon
+              src="/src/assets/icons/misc/favorite-filled.svg"
+            ></vn-icon>
+            {{ getText('buttonLabel_contribute') }}
+          </vn-button>
+        </div>
+      </div>
+    </div>
+  </vn-app>
 </template>
 
 <script>
-import {FormField, Switch} from 'ext-components';
+import {toRaw} from 'vue';
+import {App, Button, Icon, Select, Switch} from 'vueton';
 
 import storage from 'storage/storage';
+import {getListItems, showContributePage} from 'utils/app';
 import {getText} from 'utils/common';
+import {enableContributions} from 'utils/config';
 import {optionKeys} from 'utils/data';
 
 export default {
   components: {
-    [FormField.name]: FormField,
-    [Switch.name]: Switch
+    [App.name]: App,
+    [Button.name]: Button,
+    [Icon.name]: Icon,
+    [Switch.name]: Switch,
+    [Select.name]: Select
   },
 
-  data: function() {
+  data: function () {
     return {
       dataLoaded: false,
 
+      listItems: {
+        ...getListItems(
+          {appTheme: ['auto', 'light', 'dark']},
+          {scope: 'optionValue_appTheme'}
+        )
+      },
+
+      enableContributions,
+
       options: {
         autoplay: false,
-        autoplayPlaylist: false
+        autoplayPlaylist: false,
+        appTheme: false,
+        showContribPage: false
       }
     };
   },
 
   methods: {
-    getText
+    getText,
+
+    setup: async function () {
+      const options = await storage.get(optionKeys);
+
+      for (const option of Object.keys(this.options)) {
+        this.options[option] = options[option];
+
+        this.$watch(
+          `options.${option}`,
+          async function (value) {
+            await storage.set({[option]: toRaw(value)});
+            await browser.runtime.sendMessage({id: 'optionChange'});
+          },
+          {deep: true}
+        );
+      }
+
+      this.dataLoaded = true;
+    },
+
+    showContribute: async function () {
+      await showContributePage();
+    }
   },
 
-  created: async function() {
-    const options = await storage.get(optionKeys);
-
-    for (const option of Object.keys(this.options)) {
-      this.options[option] = options[option];
-      this.$watch(`options.${option}`, async function(value) {
-        await storage.set({[option]: value});
-      });
-    }
-
+  created: function () {
     document.title = getText('pageTitle', [
       getText('pageTitle_options'),
       getText('extensionName')
     ]);
 
-    this.dataLoaded = true;
+    this.setup();
   }
 };
 </script>
 
 <style lang="scss">
-$mdc-theme-primary: #1abc9c;
+@use 'vueton/styles' as vueton;
 
-@import '@material/typography/mixins';
+@include vueton.theme-base;
+@include vueton.transitions;
 
-body {
-  margin: 0;
-  @include mdc-typography-base;
-  font-size: 100%;
-  background-color: #ffffff;
-  overflow: visible !important;
-}
-
-#app {
+.v-application__wrap {
   display: grid;
   grid-row-gap: 32px;
+  grid-column-gap: 48px;
   padding: 24px;
+  grid-auto-rows: min-content;
+  grid-auto-columns: min-content;
 }
 
-.mdc-switch {
-  margin-right: 16px;
+.section-title {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 32px;
 }
 
 .option-wrap {
   display: grid;
   grid-row-gap: 24px;
-  grid-auto-columns: min-content;
+  padding-top: 24px;
 }
 
 .option {
   display: flex;
   align-items: center;
-  height: 24px;
+  height: 20px;
 
-  & .mdc-form-field {
-    max-width: calc(100vw - 48px);
+  &.button {
+    height: 40px;
+  }
 
-    & label {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+  &.select,
+  &.text-field {
+    height: 56px;
+  }
+
+  & .contribute-button {
+    @include vueton.theme-prop(color, primary);
+
+    & .vn-icon {
+      @include vueton.theme-prop(background-color, cta);
     }
   }
 }

@@ -1,11 +1,6 @@
-import browser from 'webextension-polyfill';
-
 const message = 'Initial version';
 
 const revision = 'HZQD8wqaz';
-const downRevision = null;
-
-const storage = browser.storage.local;
 
 async function upgrade() {
   const changes = {
@@ -13,7 +8,7 @@ async function upgrade() {
   };
 
   changes.storageVersion = revision;
-  return storage.set(changes);
+  return browser.storage.local.set(changes);
 }
 
 export {message, revision, upgrade};

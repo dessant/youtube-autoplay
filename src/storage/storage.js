@@ -1,5 +1,3 @@
-import browser from 'webextension-polyfill';
-
 import {storageRevisions} from 'utils/config';
 
 async function isStorageArea({area = 'local'} = {}) {
@@ -21,8 +19,6 @@ async function isStorageReady({area = 'local'} = {}) {
       storageReady[area] = true;
       return true;
     }
-
-    console.log(storageVersion, storageRevisions);
   }
 
   return false;
@@ -33,7 +29,7 @@ async function ensureStorageReady({area = 'local'} = {}) {
     return new Promise((resolve, reject) => {
       let stop;
 
-      const checkStorage = async function() {
+      const checkStorage = async function () {
         if (await isStorageReady({area})) {
           window.clearTimeout(timeoutId);
           resolve();
@@ -44,7 +40,7 @@ async function ensureStorageReady({area = 'local'} = {}) {
         }
       };
 
-      const timeoutId = window.setTimeout(function() {
+      const timeoutId = window.setTimeout(function () {
         stop = true;
       }, 60000); // 1 minute
 

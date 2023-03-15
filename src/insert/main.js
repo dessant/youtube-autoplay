@@ -1,4 +1,3 @@
-import browser from 'webextension-polyfill';
 import Cookies from 'js-cookie';
 
 import {isStorageReady} from 'storage/storage';

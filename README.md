@@ -3,11 +3,11 @@
 
 <p align="center">
   </br></br>
-  <a href="https://chrome.google.com/webstore/detail/aogbgdnkcjgamgglpikcenliinchedel">
+  <a href="https://chrome.google.com/webstore/detail/autoplay-settings-for-you/aogbgdnkcjgamgglpikcenliinchedel">
     <img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube_autoplay/">
     <img height="58" src="https://i.imgur.com/2jJOtTI.png" alt="Firefox add-ons"></a>
-  <a href="https://microsoftedge.microsoft.com/addons/detail/jeojbmbfnebmodmblljdmmbbfliolkgd">
+  <a href="https://microsoftedge.microsoft.com/addons/detail/autoplay-settings-for-you/jeojbmbfnebmodmblljdmmbbfliolkgd">
     <img height="58" src="https://i.imgur.com/es2YFRA.png" alt="Microsoft Store"></a>
   </br></br>
 </p>
@@ -35,7 +35,7 @@ your autoplay settings between sessions.
 
 ## License
 
-Copyright (c) 2018-2021 Armin Sebastian
+Copyright (c) 2018-2023 Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for further information.
