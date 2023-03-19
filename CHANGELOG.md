@@ -12,6 +12,7 @@ and Firefox 91 are no longer supported
 
 ### Features
 
+* Dark mode
 * migrate to Vuetify ([5eb8c0e](https://github.com/dessant/youtube-autoplay/commit/5eb8c0e3d9ad2713e3fd6cf95af0d7ef5d801a48))
 
 
