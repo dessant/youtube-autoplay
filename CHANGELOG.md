@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/dessant/youtube-autoplay/compare/v1.1.0...v2.0.0) (2023-03-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* browser versions older than Chrome 92, Edge 92,
+and Firefox 91 are no longer supported
+
+### Features
+
+* migrate to Vuetify ([5eb8c0e](https://github.com/dessant/youtube-autoplay/commit/5eb8c0e3d9ad2713e3fd6cf95af0d7ef5d801a48))
+
+
+### Bug Fixes
+
+* sync autoplay option ([dd4dda9](https://github.com/dessant/youtube-autoplay/commit/dd4dda9e2eba340b2b004031735891162ec73a37)), closes [#7](https://github.com/dessant/youtube-autoplay/issues/7)
+
 ## [1.1.0](https://github.com/dessant/youtube-autoplay/compare/v1.0.2...v1.1.0) (2021-12-26)
 
 
