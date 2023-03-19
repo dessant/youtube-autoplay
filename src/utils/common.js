@@ -20,47 +20,26 @@ function executeFile(file, tabId, frameId = 0, runAt = 'document_start') {
   });
 }
 
-async function updateCookie(cookie, url, changes) {
-  const newCookie = {
-    url,
-    name: cookie.name,
-    value: cookie.value,
-    domain: cookie.domain,
-    path: cookie.path,
-    httpOnly: cookie.httpOnly,
-    secure: cookie.secure,
-    storeId: cookie.storeId
-  };
+function findNode(
+  selector,
+  {
+    timeout = 60000,
+    throwError = true,
+    observerOptions = null,
+    rootNode = null
+  } = {}
+) {
+  return new Promise((resolve, reject) => {
+    rootNode = rootNode || document;
 
-  if (cookie.hasOwnProperty('expirationDate')) {
-    newCookie.expirationDate = cookie.expirationDate;
-  }
-
-  // Chrome
-  if (cookie.hasOwnProperty('sameSite')) {
-    newCookie.sameSite = cookie.sameSite;
-  }
-
-  // Firefox >= 58
-  if (cookie.hasOwnProperty('firstPartyDomain')) {
-    newCookie.firstPartyDomain = cookie.firstPartyDomain;
-  }
-
-  Object.assign(newCookie, changes);
-
-  await browser.cookies.set(newCookie);
-}
-
-function waitForElement(selector, {timeout = 10000} = {}) {
-  return new Promise(resolve => {
-    const el = document.querySelector(selector);
+    const el = rootNode.querySelector(selector);
     if (el) {
       resolve(el);
       return;
     }
 
     const observer = new MutationObserver(function (mutations, obs) {
-      const el = document.querySelector(selector);
+      const el = rootNode.querySelector(selector);
       if (el) {
         obs.disconnect();
         window.clearTimeout(timeoutId);
@@ -68,14 +47,24 @@ function waitForElement(selector, {timeout = 10000} = {}) {
       }
     });
 
-    observer.observe(document, {
+    const options = {
       childList: true,
       subtree: true
-    });
+    };
+    if (observerOptions) {
+      Object.assign(options, observerOptions);
+    }
+
+    observer.observe(rootNode, options);
 
     const timeoutId = window.setTimeout(function () {
       observer.disconnect();
-      resolve();
+
+      if (throwError) {
+        reject(new Error(`DOM node not found: ${selector}`));
+      } else {
+        resolve();
+      }
     }, timeout);
   });
 }
@@ -217,8 +206,7 @@ export {
   getText,
   executeCode,
   executeFile,
-  updateCookie,
-  waitForElement,
+  findNode,
   createTab,
   getActiveTab,
   getPlatform,

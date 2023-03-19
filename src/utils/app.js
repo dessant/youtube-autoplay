@@ -167,7 +167,7 @@ async function processAppUse({
 
   if (showContribPage) {
     return autoShowContributePage({
-      minUseCount: 10,
+      minUseCount: 1,
       minInstallDays: 14,
       minLastOpenDays: 14,
       minLastAutoOpenDays: 365,
@@ -217,6 +217,35 @@ async function getAppTheme(theme) {
   return theme;
 }
 
+async function insertBaseModule({
+  activeTab = false,
+  url = null,
+  allFrames = true
+} = {}) {
+  const tabs = [];
+  if (activeTab) {
+    const tab = await getActiveTab();
+    if (tab) {
+      tabs.push(tab);
+    }
+  } else {
+    tabs.push(
+      ...(await browser.tabs.query({
+        url: url || ['http://*/*', 'https://*/*'],
+        windowType: 'normal'
+      }))
+    );
+  }
+
+  for (const tab of tabs) {
+    browser.tabs.executeScript(tab.id, {
+      allFrames,
+      runAt: 'document_start',
+      file: '/src/base/script.js'
+    });
+  }
+}
+
 export {
   getListItems,
   configApp,
@@ -229,5 +258,6 @@ export {
   showOptionsPage,
   getOpenerTabId,
   showPage,
-  getAppTheme
+  getAppTheme,
+  insertBaseModule
 };

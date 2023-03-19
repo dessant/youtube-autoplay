@@ -50,8 +50,7 @@ module.exports = {
   entry: {
     background: './src/background/main.js',
     options: './src/options/main.js',
-    insert: './src/insert/main.js',
-    content: './src/content/main.js',
+    base: './src/base/main.js',
     ...entries
   },
   output: {

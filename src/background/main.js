@@ -1,65 +1,38 @@
 import {initStorage, migrateLegacyStorage} from 'storage/init';
 import {isStorageReady} from 'storage/storage';
 import storage from 'storage/storage';
-import {
-  executeCode,
-  executeFile,
-  updateCookie,
-  getPlatform
-} from 'utils/common';
+import {getPlatform} from 'utils/common';
 import {
   showPage,
   showOptionsPage,
   processAppUse,
-  processMessageResponse
+  processMessageResponse,
+  insertBaseModule
 } from 'utils/app';
 import {targetEnv} from 'utils/config';
 
-async function syncState(autoplay) {
-  if (!autoplay) {
-    ({autoplay} = await storage.get('autoplay'));
-  }
-
+async function syncState() {
   const tabs = await browser.tabs.query({url: 'https://www.youtube.com/*'});
   for (const tab of tabs) {
-    const tabId = tab.id;
-    if (await executeCode(`typeof setSwitchState === 'undefined'`, tabId)) {
-      await executeFile('/src/content/script.js', tabId);
-    }
-    await executeCode(`setSwitchState(${autoplay})`, tabId);
+    browser.tabs
+      .sendMessage(tab.id, {id: 'syncState'}, {frameId: 0})
+      .catch(err => null);
   }
 
-  const stores = await browser.cookies.getAllCookieStores();
-  for (const store of stores) {
-    const params = {
-      domain: 'youtube.com',
-      name: 'PREF',
-      storeId: store.id
-    };
-    if (targetEnv === 'firefox') {
-      params.firstPartyDomain = null;
-    }
-    const cookies = await browser.cookies.getAll(params);
+  await processAppUse();
+}
 
-    for (const cookie of cookies) {
-      const value = new URLSearchParams(cookie.value);
-      const autoplayValue = value.get('f5');
+function getCookieAutoplayValue(cookie) {
+  // old layout values ('f5') - initial (on): 30, on: 20030, off: 30030
+  // new layout values ('f5') - initial (on): none, on: 200(0|3)0, off: 300(0|3)0
+  const autoplayValue = new URLSearchParams(cookie.value).get('f5');
 
-      if (autoplay && ['30000', '30030'].includes(autoplayValue)) {
-        value.set('f5', '20000');
-        await updateCookie(cookie, 'https://www.youtube.com/', {
-          value: value.toString()
-        });
-        continue;
-      }
-
-      if (!autoplay && [null, '20000', '30', '20030'].includes(autoplayValue)) {
-        value.set('f5', '30000');
-        await updateCookie(cookie, 'https://www.youtube.com/', {
-          value: value.toString()
-        });
-      }
-    }
+  if (['20000', '20030'].includes(autoplayValue)) {
+    return true;
+  } else if (['30000', '30030'].includes(autoplayValue)) {
+    return false;
+  } else {
+    return null;
   }
 }
 
@@ -70,27 +43,14 @@ async function onCookieChange(changeInfo) {
     cookie.name === 'PREF' &&
     !changeInfo.removed
   ) {
-    const {autoplay} = await storage.get('autoplay');
+    const autoplayValue = getCookieAutoplayValue(cookie);
 
-    // old layout values ('f5') - initial (on): 30, on: 20030, off: 30030
-    // new layout values ('f5') - initial (on): none, on: 200(0|3)0, off: 300(0|3)0
-    const value = new URLSearchParams(cookie.value);
-    const autoplayValue = value.get('f5');
+    if (autoplayValue !== null) {
+      const {autoplay} = await storage.get('autoplay');
 
-    if (autoplay && ['30000', '30030'].includes(autoplayValue)) {
-      return await storage.set({autoplay: false});
-    }
-
-    if (!autoplay) {
-      if ([null, '30'].includes(autoplayValue)) {
-        value.set('f5', '30000');
-        return await updateCookie(cookie, 'https://www.youtube.com/', {
-          value: value.toString()
-        });
-      }
-
-      if (['20000', '20030'].includes(autoplayValue)) {
-        return await storage.set({autoplay: true});
+      if (autoplayValue !== autoplay) {
+        await storage.set({autoplay: autoplayValue});
+        await syncState();
       }
     }
   }
@@ -146,6 +106,18 @@ async function onActionButtonClick(tab) {
   await showOptionsPage({activeTab: tab});
 }
 
+async function onInstall(details) {
+  if (
+    ['install', 'update'].includes(details.reason) &&
+    ['chrome', 'edge', 'opera', 'samsung'].includes(targetEnv)
+  ) {
+    await insertBaseModule({
+      url: 'https://www.youtube.com/*',
+      allFrames: false
+    });
+  }
+}
+
 function addBrowserActionListener() {
   browser.browserAction.onClicked.addListener(onActionButtonClick);
 }
@@ -158,18 +130,21 @@ function addCookieListener() {
   browser.cookies.onChanged.addListener(onCookieChange);
 }
 
+function addInstallListener() {
+  browser.runtime.onInstalled.addListener(onInstall);
+}
+
 async function setup() {
   if (!(await isStorageReady())) {
     await migrateLegacyStorage();
     await initStorage();
   }
-
-  await syncState();
 }
 
 function init() {
   addBrowserActionListener();
   addMessageListener();
+  addInstallListener();
   addCookieListener();
 
   setup();

@@ -57,8 +57,9 @@
   "content_scripts": [
     {
       "matches": ["*://www.youtube.com/*"],
+      "all_frames": false,
       "run_at": "document_start",
-      "js": ["src/insert/script.js"]
+      "js": ["src/base/script.js"]
     }
   ]
 }
