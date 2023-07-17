@@ -6,7 +6,8 @@ import {
   showOptionsPage,
   processAppUse,
   processMessageResponse,
-  insertBaseModule
+  insertBaseModule,
+  isValidTab
 } from 'utils/app';
 import {targetEnv} from 'utils/config';
 
@@ -40,7 +41,7 @@ async function processMessage(request, sender) {
       sender.tab = null;
     }
 
-    if (sender.tab && sender.tab.id !== browser.tabs.TAB_ID_NONE) {
+    if (isValidTab(sender.tab)) {
       // Samsung Internet 13: runtime.onMessage provides wrong tab index.
       sender.tab = await browser.tabs.get(sender.tab.id);
     }

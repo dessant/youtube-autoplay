@@ -65,14 +65,17 @@ function processMessageResponse(response, sendResponse) {
 }
 
 async function getOpenerTabId(openerTab) {
-  if (
-    openerTab.id !== browser.tabs.TAB_ID_NONE &&
-    !(await getPlatform()).isMobile
-  ) {
+  if (isValidTab(openerTab) && !(await getPlatform()).isMobile) {
     return openerTab.id;
   }
 
   return null;
+}
+
+function isValidTab(tab) {
+  if (tab && tab.id !== browser.tabs.TAB_ID_NONE) {
+    return true;
+  }
 }
 
 async function showPage({
@@ -217,6 +220,25 @@ async function getAppTheme(theme) {
   return theme;
 }
 
+function addSystemThemeListener(callback) {
+  getDarkColorSchemeQuery().addEventListener('change', function () {
+    callback();
+  });
+}
+
+function addAppThemeListener(callback) {
+  browser.storage.onChanged.addListener(function (changes, area) {
+    if (area === 'local' && changes.appTheme) {
+      callback();
+    }
+  });
+}
+
+function addThemeListener(callback) {
+  addSystemThemeListener(callback);
+  addAppThemeListener(callback);
+}
+
 async function insertBaseModule({
   activeTab = false,
   url = null,
@@ -257,7 +279,11 @@ export {
   processAppUse,
   showOptionsPage,
   getOpenerTabId,
+  isValidTab,
   showPage,
   getAppTheme,
+  addSystemThemeListener,
+  addAppThemeListener,
+  addThemeListener,
   insertBaseModule
 };
