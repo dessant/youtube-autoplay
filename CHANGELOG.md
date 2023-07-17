@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/dessant/youtube-autoplay/compare/v2.0.0...v2.0.1) (2023-07-17)
+
+
+### Bug Fixes
+
+* do not save automatic option changes ([6b17ae2](https://github.com/dessant/youtube-autoplay/commit/6b17ae2416ce02858d4a899678b80b7121c28f28))
+* update autoplay value only when player is visible ([4d51fb4](https://github.com/dessant/youtube-autoplay/commit/4d51fb4eec6299557625d57421419ffaa8cbe10e)), closes [#11](https://github.com/dessant/youtube-autoplay/issues/11)
+
 ## [2.0.0](https://github.com/dessant/youtube-autoplay/compare/v1.1.0...v2.0.0) (2023-03-19)
 
 
