@@ -30,6 +30,20 @@ function removeVideo(video) {
   }
 }
 
+async function onAutoplayButtonClick(ev) {
+  const targetNode = ev.target;
+
+  let autoplay;
+  if (targetNode.nodeName.toLowerCase() === 'button') {
+    autoplay = targetNode.querySelector('[aria-checked="true"]') !== null;
+  } else {
+    autoplay = targetNode.getAttribute('aria-checked') === 'true';
+  }
+
+  await storage.set({autoplay});
+  await browser.runtime.sendMessage({id: 'optionChange'});
+}
+
 async function setAutoplay() {
   const button = await findNode(
     '.ytp-right-controls button[data-tooltip-target-id="ytp-autonav-toggle-button"]',
@@ -37,10 +51,14 @@ async function setAutoplay() {
   );
 
   if (button) {
+    button.removeEventListener('click', onAutoplayButtonClick);
+
     const isOn = button.querySelector('[aria-checked="true"]') !== null;
     if (contentStorage.autoplay !== isOn) {
       button.click();
     }
+
+    button.addEventListener('click', onAutoplayButtonClick);
   }
 }
 

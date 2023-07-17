@@ -1,6 +1,5 @@
 import {initStorage, migrateLegacyStorage} from 'storage/init';
 import {isStorageReady} from 'storage/storage';
-import storage from 'storage/storage';
 import {getPlatform} from 'utils/common';
 import {
   showPage,
@@ -20,40 +19,6 @@ async function syncState() {
   }
 
   await processAppUse();
-}
-
-function getCookieAutoplayValue(cookie) {
-  // old layout values ('f5') - initial (on): 30, on: 20030, off: 30030
-  // new layout values ('f5') - initial (on): none, on: 200(0|3)0, off: 300(0|3)0
-  const autoplayValue = new URLSearchParams(cookie.value).get('f5');
-
-  if (['20000', '20030'].includes(autoplayValue)) {
-    return true;
-  } else if (['30000', '30030'].includes(autoplayValue)) {
-    return false;
-  } else {
-    return null;
-  }
-}
-
-async function onCookieChange(changeInfo) {
-  const cookie = changeInfo.cookie;
-  if (
-    cookie.domain === '.youtube.com' &&
-    cookie.name === 'PREF' &&
-    !changeInfo.removed
-  ) {
-    const autoplayValue = getCookieAutoplayValue(cookie);
-
-    if (autoplayValue !== null) {
-      const {autoplay} = await storage.get('autoplay');
-
-      if (autoplayValue !== autoplay) {
-        await storage.set({autoplay: autoplayValue});
-        await syncState();
-      }
-    }
-  }
 }
 
 async function processMessage(request, sender) {
@@ -126,10 +91,6 @@ function addMessageListener() {
   browser.runtime.onMessage.addListener(onMessage);
 }
 
-function addCookieListener() {
-  browser.cookies.onChanged.addListener(onCookieChange);
-}
-
 function addInstallListener() {
   browser.runtime.onInstalled.addListener(onInstall);
 }
@@ -145,7 +106,6 @@ function init() {
   addBrowserActionListener();
   addMessageListener();
   addInstallListener();
-  addCookieListener();
 
   setup();
 }

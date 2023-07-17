@@ -14,7 +14,7 @@
     }
   },
 
-  "permissions": ["cookies", "storage", "tabs", "*://*.youtube.com/*"],
+  "permissions": ["storage", "tabs", "*://*.youtube.com/*"],
 
   "content_security_policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src *; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none';",
 
