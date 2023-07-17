@@ -46,7 +46,7 @@ async function onAutoplayButtonClick(ev) {
 
 async function setAutoplay() {
   const button = await findNode(
-    '.ytp-right-controls button[data-tooltip-target-id="ytp-autonav-toggle-button"]',
+    '.ytp-right-controls button[data-tooltip-target-id="ytp-autonav-toggle-button"][style=""]',
     {throwError: false}
   );
 
