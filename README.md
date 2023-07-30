@@ -4,11 +4,17 @@
 <p align="center">
   </br></br>
   <a href="https://chrome.google.com/webstore/detail/autoplay-settings-for-you/aogbgdnkcjgamgglpikcenliinchedel">
-    <img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/youtube_autoplay/">
-    <img height="58" src="https://i.imgur.com/2jJOtTI.png" alt="Firefox add-ons"></a>
+    <picture>
+      <source srcset="https://i.imgur.com/XBIE9pk.png" media="(prefers-color-scheme: dark)">
+      <img height="58" src="https://i.imgur.com/oGxig2F.png" alt="Chrome Web Store"></picture></a>
+  <a href="https://addons.mozilla.org/firefox/addon/youtube_autoplay/">
+    <picture>
+      <source srcset="https://i.imgur.com/ZluoP7T.png" media="(prefers-color-scheme: dark)">
+      <img height="58" src="https://i.imgur.com/4PobQqE.png" alt="Firefox add-ons"></picture></a>
   <a href="https://microsoftedge.microsoft.com/addons/detail/autoplay-settings-for-you/jeojbmbfnebmodmblljdmmbbfliolkgd">
-    <img height="58" src="https://i.imgur.com/es2YFRA.png" alt="Microsoft Store"></a>
+    <picture>
+      <source srcset="https://i.imgur.com/Jog9cQP.png" media="(prefers-color-scheme: dark)">
+      <img height="58" src="https://i.imgur.com/aiprUt8.png" alt="Microsoft Store"></picture></a>
   </br></br>
 </p>
 
