@@ -1,13 +1,21 @@
 import storage from 'storage/storage';
 import {
   getText,
+  executeScript,
   createTab,
   getActiveTab,
+  isValidTab,
   getPlatform,
   getDayPrecisionEpoch,
   getDarkColorSchemeQuery
 } from 'utils/common';
-import {targetEnv, enableContributions} from 'utils/config';
+import {
+  targetEnv,
+  enableContributions,
+  storageRevisions,
+  appVersion,
+  mv3
+} from 'utils/config';
 
 function getListItems(data, {scope = '', shortScope = ''} = {}) {
   const results = {};
@@ -33,19 +41,37 @@ function getListItems(data, {scope = '', shortScope = ''} = {}) {
   return results;
 }
 
-async function loadFonts(fonts) {
-  await Promise.allSettled(fonts.map(font => document.fonts.load(font)));
+async function insertBaseModule({
+  activeTab = false,
+  url = null,
+  allFrames = true
+} = {}) {
+  const tabs = [];
+  if (activeTab) {
+    const tab = await getActiveTab();
+    if (tab) {
+      tabs.push(tab);
+    }
+  } else {
+    tabs.push(
+      ...(await browser.tabs.query({
+        url: url || ['http://*/*', 'https://*/*'],
+        windowType: 'normal'
+      }))
+    );
+  }
+
+  for (const tab of tabs) {
+    executeScript({
+      files: ['/src/base/script.js'],
+      tabId: tab.id,
+      allFrames
+    });
+  }
 }
 
-async function configApp(app) {
-  const platform = await getPlatform();
-
-  const classes = [platform.targetEnv, platform.os];
-  document.documentElement.classList.add(...classes);
-
-  if (app) {
-    app.config.globalProperties.$env = platform;
-  }
+async function loadFonts(fonts) {
+  await Promise.allSettled(fonts.map(font => document.fonts.load(font)));
 }
 
 function processMessageResponse(response, sendResponse) {
@@ -64,18 +90,58 @@ function processMessageResponse(response, sendResponse) {
   }
 }
 
-async function getOpenerTabId(openerTab) {
-  if (isValidTab(openerTab) && !(await getPlatform()).isMobile) {
-    return openerTab.id;
+async function configApp(app) {
+  const platform = await getPlatform();
+
+  const classes = [platform.targetEnv, platform.os];
+  document.documentElement.classList.add(...classes);
+
+  if (app) {
+    app.config.globalProperties.$env = platform;
+  }
+}
+
+async function getAppTheme(theme) {
+  if (!theme) {
+    ({appTheme: theme} = await storage.get('appTheme'));
+  }
+
+  if (theme === 'auto') {
+    theme = getDarkColorSchemeQuery().matches ? 'dark' : 'light';
+  }
+
+  return theme;
+}
+
+function addSystemThemeListener(callback) {
+  getDarkColorSchemeQuery().addEventListener('change', function () {
+    callback();
+  });
+}
+
+function addAppThemeListener(callback) {
+  browser.storage.onChanged.addListener(function (changes, area) {
+    if (area === 'local' && changes.appTheme) {
+      callback();
+    }
+  });
+}
+
+function addThemeListener(callback) {
+  addSystemThemeListener(callback);
+  addAppThemeListener(callback);
+}
+
+async function getOpenerTabId({tab, tabId = null} = {}) {
+  if (!tab && tabId !== null) {
+    tab = await browser.tabs.get(tabId).catch(err => null);
+  }
+
+  if ((await isValidTab({tab})) && !(await getPlatform()).isMobile) {
+    return tab.id;
   }
 
   return null;
-}
-
-function isValidTab(tab) {
-  if (tab && tab.id !== browser.tabs.TAB_ID_NONE) {
-    return true;
-  }
 }
 
 async function showPage({
@@ -91,7 +157,7 @@ async function showPage({
   const props = {url, index: activeTab.index + 1, active: true, getTab};
 
   if (setOpenerTab) {
-    props.openerTabId = await getOpenerTabId(activeTab);
+    props.openerTabId = await getOpenerTabId({tab: activeTab});
   }
 
   return createTab(props);
@@ -208,82 +274,117 @@ async function showOptionsPage({getTab = false, activeTab = null} = {}) {
   });
 }
 
-async function getAppTheme(theme) {
-  if (!theme) {
-    ({appTheme: theme} = await storage.get('appTheme'));
-  }
-
-  if (theme === 'auto') {
-    theme = getDarkColorSchemeQuery().matches ? 'dark' : 'light';
-  }
-
-  return theme;
+async function setAppVersion() {
+  await storage.set({appVersion});
 }
 
-function addSystemThemeListener(callback) {
-  getDarkColorSchemeQuery().addEventListener('change', function () {
-    callback();
-  });
-}
+async function isSessionStartup() {
+  const privateContext = browser.extension.inIncognitoContext;
 
-function addAppThemeListener(callback) {
-  browser.storage.onChanged.addListener(function (changes, area) {
-    if (area === 'local' && changes.appTheme) {
-      callback();
+  const sessionKey = privateContext ? 'privateSession' : 'session';
+  const session = (await browser.storage.session.get(sessionKey))[sessionKey];
+
+  if (!session) {
+    await browser.storage.session.set({[sessionKey]: true});
+  }
+
+  if (privateContext) {
+    try {
+      if (!(await self.caches.has(sessionKey))) {
+        await self.caches.open(sessionKey);
+
+        return true;
+      }
+    } catch (err) {
+      return true;
     }
-  });
-}
-
-function addThemeListener(callback) {
-  addSystemThemeListener(callback);
-  addAppThemeListener(callback);
-}
-
-async function insertBaseModule({
-  activeTab = false,
-  url = null,
-  allFrames = true
-} = {}) {
-  const tabs = [];
-  if (activeTab) {
-    const tab = await getActiveTab();
-    if (tab) {
-      tabs.push(tab);
-    }
-  } else {
-    tabs.push(
-      ...(await browser.tabs.query({
-        url: url || ['http://*/*', 'https://*/*'],
-        windowType: 'normal'
-      }))
-    );
   }
 
-  for (const tab of tabs) {
-    browser.tabs.executeScript(tab.id, {
-      allFrames,
-      runAt: 'document_start',
-      file: '/src/base/script.js'
-    });
+  if (!session) {
+    return true;
   }
+}
+
+async function isStartup() {
+  const startup = {
+    install: false,
+    update: false,
+    session: false,
+    setupInstance: false,
+    setupSession: false
+  };
+
+  const {storageVersion, appVersion: savedAppVersion} =
+    await browser.storage.local.get(['storageVersion', 'appVersion']);
+
+  if (!storageVersion) {
+    startup.install = true;
+  }
+
+  if (
+    storageVersion !== storageRevisions.local ||
+    savedAppVersion !== appVersion
+  ) {
+    startup.update = true;
+  }
+
+  if (mv3 && (await isSessionStartup())) {
+    startup.session = true;
+  }
+
+  if (startup.install || startup.update) {
+    startup.setupInstance = true;
+  }
+
+  if (startup.session || !mv3) {
+    startup.setupSession = true;
+  }
+
+  return startup;
+}
+
+let startupState;
+async function getStartupState({event = ''} = {}) {
+  if (!startupState) {
+    startupState = isStartup();
+    startupState.events = [];
+  }
+
+  if (event) {
+    startupState.events.push(event);
+  }
+
+  const startup = await startupState;
+
+  if (startupState.events.includes('install')) {
+    startup.setupInstance = true;
+  }
+  if (startupState.events.includes('startup')) {
+    startup.setupSession = true;
+  }
+
+  return startup;
 }
 
 export {
   getListItems,
-  configApp,
+  insertBaseModule,
   loadFonts,
   processMessageResponse,
-  showContributePage,
-  autoShowContributePage,
-  updateUseCount,
-  processAppUse,
-  showOptionsPage,
-  getOpenerTabId,
-  isValidTab,
-  showPage,
+  configApp,
   getAppTheme,
   addSystemThemeListener,
   addAppThemeListener,
   addThemeListener,
-  insertBaseModule
+  getOpenerTabId,
+  showPage,
+  autoShowContributePage,
+  updateUseCount,
+  processAppUse,
+  showContributePage,
+  showOptionsPage,
+  setAppVersion,
+  isSessionStartup,
+  isStartup,
+  getStartupState
 };

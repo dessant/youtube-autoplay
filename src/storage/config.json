@@ -3,8 +3,9 @@
     "local": [
       "HZQD8wqaz",
       "FoFb8yK2D",
-      "20230311075441_add_theme_support"
+      "20230311075441_add_theme_support",
+      "20240514170322_add_appversion"
     ],
-    "sync": []
+    "session": ["20240514122825_initial_version"]
   }
 }
