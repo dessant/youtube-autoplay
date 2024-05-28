@@ -1,6 +1,18 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [3.0.0](https://github.com/dessant/youtube-autoplay/compare/v2.0.1...v3.0.0) (2024-05-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* browser versions older than Chrome 123, Edge 123,
+Firefox 115 and Opera 109 are no longer supported
+
+### Features
+
+* upgrade to Manifest V3 in Chrome ([6badc97](https://github.com/dessant/youtube-autoplay/commit/6badc976425e8ddf0090bfa1cf2d6323fc0195cb))
 
 ### [2.0.1](https://github.com/dessant/youtube-autoplay/compare/v2.0.0...v2.0.1) (2023-07-17)
 
