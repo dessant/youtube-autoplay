@@ -7,14 +7,14 @@
   "homepage_url": "https://github.com/dessant/youtube-autoplay",
   "default_locale": "en",
 
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "{14e605a0-6fdd-43e9-891a-29f6e481db24}",
       "strict_min_version": "115.0"
     }
   },
 
-  "permissions": ["storage", "tabs", "*://*.youtube.com/*"],
+  "permissions": ["storage", "tabs", "scripting", "*://*.youtube.com/*"],
 
   "content_security_policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *; object-src 'none'; media-src 'none'; child-src 'none'; form-action 'none'; upgrade-insecure-requests;",
 
