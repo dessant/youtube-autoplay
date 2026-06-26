@@ -3,7 +3,7 @@
 
 <p align="center">
   </br></br>
-  <a href="https://chrome.google.com/webstore/detail/autoplay-settings-for-you/aogbgdnkcjgamgglpikcenliinchedel">
+  <a href="https://chromewebstore.google.com/detail/autoplay-settings-for-you/aogbgdnkcjgamgglpikcenliinchedel">
     <picture>
       <source srcset="https://i.imgur.com/XBIE9pk.png" media="(prefers-color-scheme: dark)">
       <img height="58" src="https://i.imgur.com/oGxig2F.png" alt="Chrome Web Store"></picture></a>
@@ -42,9 +42,9 @@
 The continued development of Autoplay Settings for YouTube is made possible
 thanks to the support of awesome backers. If you'd like to join them,
 please consider contributing with
-[Patreon](https://armin.dev/go/patreon?pr=youtube-autoplay&src=repo),
-[PayPal](https://armin.dev/go/paypal?pr=youtube-autoplay&src=repo) or
-[Bitcoin](https://armin.dev/go/bitcoin?pr=youtube-autoplay&src=repo).
+[Patreon](https://go.vapps.dev/patreon?pr=youtube-autoplay&src=repo),
+[PayPal](https://go.vapps.dev/paypal?pr=youtube-autoplay&src=repo) or
+[Bitcoin](https://go.vapps.dev/bitcoin?pr=youtube-autoplay&src=repo).
 
 ## Description
 
@@ -60,7 +60,7 @@ your autoplay settings between sessions.
 
 ## License
 
-Copyright (c) 2018-2024 Armin Sebastian
+Copyright (c) 2018-2026 Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for further information.
