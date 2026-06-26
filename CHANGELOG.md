@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.0](https://github.com/dessant/youtube-autoplay/compare/v3.0.0...v3.1.0) (2026-06-26)
+
+
+### Features
+
+* upgrade to Manifest V3 in Edge ([d994928](https://github.com/dessant/youtube-autoplay/commit/d9949289c13537b1fb9c8e66d35d7ffbdd5b8746))
+
+
+### Bug Fixes
+
+* add scripting permission ([8491ef3](https://github.com/dessant/youtube-autoplay/commit/8491ef3254466cbf100bec7ab2aa70a935bdebda))
+
 ## [3.0.0](https://github.com/dessant/youtube-autoplay/compare/v2.0.1...v3.0.0) (2024-05-28)
 
 
