@@ -8,7 +8,13 @@ import {
   setAppVersion,
   getStartupState
 } from 'utils/app';
-import {executeScript, isValidTab, getPlatform, runOnce} from 'utils/common';
+import {
+  executeScript,
+  isValidTab,
+  getPlatform,
+  getBrowser,
+  runOnce
+} from 'utils/common';
 import {getScriptFunction} from 'utils/scripts';
 import {targetEnv, mv3} from 'utils/config';
 
@@ -41,6 +47,8 @@ async function processMessage(request, sender) {
     return getPlatform();
   } else if (request.id === 'optionChange') {
     await onOptionChange();
+  } else if (request.id === 'getBrowser') {
+    return getBrowser();
   } else if (request.id === 'executeScript') {
     const params = request.params;
     if (request.setSenderTabId) {

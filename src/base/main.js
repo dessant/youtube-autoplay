@@ -1,14 +1,7 @@
 import storage from 'storage/storage';
-import {executeScriptMainContext, findNode} from 'utils/common';
+import {executeScriptMainContext, findNode, runOnce} from 'utils/common';
 
 function main() {
-  // Script may be injected multiple times.
-  if (self.baseModule) {
-    return;
-  } else {
-    self.baseModule = true;
-  }
-
   const contentStorage = {
     autoplay: false,
     videoNodes: []
@@ -138,4 +131,6 @@ function main() {
   init();
 }
 
-main();
+if (runOnce('baseModule')) {
+  main();
+}
